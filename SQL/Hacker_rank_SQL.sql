@@ -42,4 +42,44 @@ select N,case when P is null then "Root" when N in (select P from BST) then "Inn
 from BST
 order by N
 
+-----------------------------------------------------
+--Weather Station 5
+(SELECT CITY, LENGTH(CITY) as len from Station
+order by len, CITY
+limit 1)
+UNION
+(SELECT CITY, LENGTH(CITY) as len from Station
+order by len desc, CITY
+limit 1)
 
+----------------------------------------------------
+---New Companies
+SELECT C.COMPANY_CODE, C.FOUNDER, COUNT(DISTINCT LM.LEAD_MANAGER_CODE), COUNT(DISTINCT SM.SENIOR_MANAGER_CODE), COUNT(DISTINCT M.MANAGER_CODE),COUNT(DISTINCT E.EMPLOYEE_CODE) FROM COMPANY C
+INNER JOIN LEAD_MANAGER LM ON
+C.COMPANY_CODE = LM.COMPANY_CODE
+INNER JOIN SENIOR_MANAGER SM ON
+LM.LEAD_MANAGER_CODE = SM.LEAD_MANAGER_CODE 
+INNER JOIN MANAGER M ON
+SM.SENIOR_MANAGER_CODE = M.SENIOR_MANAGER_CODE
+INNER JOIN EMPLOYEE E ON 
+M.MANAGER_CODE = E.MANAGER_CODE
+GROUP BY C.COMPANY_CODE, C.FOUNDER
+ORDER BY C.COMPANY_CODE asc
+
+------------------------------------------------------
+-- FINDING MEDIAN IN SQL - WEATHER STATION 20
+SET @row_index := -1;
+SELECT ROUND(avg(SUBQ.LAT_N),4) FROM(
+SELECT @row_index:=@row_index + 1 AS row_index, LAT_N from STATION
+order by LAT_N) AS SUBQ
+WHERE SUBQ.row_index IN (FLOOR(@row_index / 2) , CEIL(@row_index / 2));
+
+------------------ 
+--Calculating Manhatan distance in SQL - Weather observation 18
+SELECT ROUND((ABS(t.a-t.c)+ABS(t.b-t.d)),4)FROM
+(SELECT MIN(LAT_N) AS A, MIN(LONG_W) AS B, MAX(LAT_N) AS C, MAX(LONG_W) AS D FROM STATION) AS T
+
+------------ Calcualting Eucliedian Distance in SQL 
+--Weather Station 19 
+SELECT ROUND(SQRT(POW(t.c-t.a,2)+POW(t.d-t.b,2)),4)FROM
+(SELECT MIN(LAT_N) AS A, MIN(LONG_W) AS B, MAX(LAT_N) AS C, MAX(LONG_W) AS D FROM STATION) AS T
