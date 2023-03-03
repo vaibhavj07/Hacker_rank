@@ -83,3 +83,59 @@ SELECT ROUND((ABS(t.a-t.c)+ABS(t.b-t.d)),4)FROM
 --Weather Station 19 
 SELECT ROUND(SQRT(POW(t.c-t.a,2)+POW(t.d-t.b,2)),4)FROM
 (SELECT MIN(LAT_N) AS A, MIN(LONG_W) AS B, MAX(LAT_N) AS C, MAX(LONG_W) AS D FROM STATION) AS T
+
+------------- The Report--------------------
+select if(g.grade < 8, NULL, s.name), g.grade, s.marks from students s
+join grades g where s.marks between g.min_mark and g.max_mark
+order by grade desc, s.name, s.marks
+
+-------------------------------------Top Competitors-----------------------
+select s.hacker_id, h.name from submissions s
+join challenges c on 
+s.challenge_id = c.challenge_id
+join difficulty d on
+c.difficulty_level = d.difficulty_level
+join hackers h on
+s.hacker_id = h.hacker_id
+where s.score = d.score
+group by s.hacker_id, h.name
+having count(s.hacker_id) > 1
+order by count(s.hacker_id) desc, s.hacker_id asc
+
+-------------------------------- Olliander's Inventory--------------------------------
+select w.id,wp.age, w.coins_needed, w.power from wands w
+join wands_property wp on 
+w.code = wp.code
+where wp.is_evil = 0 and w.coins_needed =(SELECT MIN(coins_needed) FROM wands a JOIN wands_property b ON a.code = b.code WHERE a.power = w.power AND b.age = wp.age)
+order by w.power desc, wp.age desc
+
+--------------------------------------------------------Challenges------------------------------
+/*
+Enter your query here.
+*/
+with tnc as (
+select h.hacker_id, h.name, count(c.challenge_id) as num_challenges from hackers h
+join challenges c on 
+h.hacker_id = c.hacker_id
+group by h.hacker_id, h.name
+), tcc as (
+select num_challenges, count(num_challenges) as count_challenges from tnc group by num_challenges)
+
+select tnc.hacker_id, tnc.name, tnc.num_challenges from tnc 
+join tcc on tnc.num_challenges = tcc.num_challenges
+where tcc.count_challenges < 2
+or 
+tnc.num_challenges = (select max(num_challenges) from tnc)
+order by tnc.num_challenges desc, hacker_id
+
+----------------------------------------- Contest Leaderboard--------------------------------------
+SELECT h.hacker_id, h.name, SUM(sub.score)
+FROM
+    (SELECT hacker_id, challenge_id, MAX(score) score
+    FROM submissions
+    GROUP BY hacker_id, challenge_id) sub
+JOIN hackers h
+ON sub.hacker_id = h.hacker_id
+GROUP BY h.hacker_id, h.name
+HAVING SUM(sub.score) != 0
+ORDER BY SUM(sub.score) DESC, h.hacker_id
