@@ -139,3 +139,44 @@ ON sub.hacker_id = h.hacker_id
 GROUP BY h.hacker_id, h.name
 HAVING SUM(sub.score) != 0
 ORDER BY SUM(sub.score) DESC, h.hacker_id
+---------------------------SQL Project plannins
+WITH PROJECT_START_DATE AS (
+SELECT 
+    START_DATE,
+    RANK() OVER (ORDER BY START_DATE) AS RANK_START
+FROM PROJECTS 
+WHERE START_DATE NOT IN (SELECT END_DATE FROM PROJECTS)
+),
+PROJECT_END_DATE AS(
+SELECT 
+    END_DATE,
+    RANK() OVER (ORDER BY END_DATE) AS RANK_END
+FROM PROJECTS 
+WHERE END_DATE NOT IN (SELECT START_DATE FROM PROJECTS))
+
+SELECT start_date, end_date FROM PROJECT_START_DATE, PROJECT_END_DATE
+where rank_start = rank_end
+order by end_date - start_date, start_date
+------------------Placements-----------------------
+/*
+Enter your query here.
+*/
+select s.name from students s
+join friends f on
+s.id = f.id
+join packages p on 
+p.id = s.id
+join packages p1 on
+f.friend_id = p1.id
+where p1.salary > p.salary
+order by p1.salary
+--------------------------------- symmetric pairs------------
+/*
+Enter your query here.
+*/
+
+select f1.x as x1 ,f1.y as y1 from functions f1
+join functions f2
+on f1.x = f2.y and f2.x = f1.y group by f1.x,f1.y
+having count(f1.x) > 1 or f1.x<f1.y
+order by f1.x asc
