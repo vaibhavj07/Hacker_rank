@@ -180,3 +180,65 @@ join functions f2
 on f1.x = f2.y and f2.x = f1.y group by f1.x,f1.y
 having count(f1.x) > 1 or f1.x<f1.y
 order by f1.x asc
+
+-----------weather station 1---------------------------------------------
+/*
+Enter your query here.
+*/
+SELECT CITY, STATE FROM STATION
+--------------weather station 3-----------------------------
+/*
+Enter your query here.
+*/
+select distinct city from station 
+where mod(id,2) = 0
+-------------weather station 4
+/*
+Enter your query here.
+*/
+select count(*) - count(distinct city) from station
+------------------weather station 6------------------
+/*
+Enter your query here.
+*/
+select city from station
+where left(city,1) in ('a', 'e', 'i', 'o','u')
+----------weather station 7-------------------------
+/*
+Enter your query here.
+*/
+select distinct city from station
+where right(city,1) in ('a', 'e', 'i', 'o','u')
+-----------weather station 8 ------------------------
+/*
+Enter your query here.
+*/
+select distinct city from station
+where right(city,1) in ('a', 'e', 'i', 'o','u') and left(city,1) in ('a', 'e', 'i', 'o','u')
+----------weather station 9------------------------------------
+/*
+Enter your query here.
+*/
+select distinct city from station
+where left(city,1) not in ('a', 'e', 'i', 'o','u')
+---------------weather station 10--------------------------------
+/*
+Enter your query here.
+*/
+select distinct city from station
+where right(city,1) not in ('a', 'e', 'i', 'o','u')
+-----------weather  station 11 ----------------------------------
+/*
+Enter your query here.
+*/
+select distinct city from station
+where right(city,1) not in ('a', 'e', 'i', 'o','u') or left(city,1)  not in ('a', 'e', 'i', 'o','u')
+-----------------weather station 12------------------------------
+/*
+Enter your query here.
+*/
+select distinct city from station
+where right(city,1) not in ('a', 'e', 'i', 'o','u') and left(city,1)  not in ('a', 'e', 'i', 'o','u')
+------------------------Higher than 75 marks------------------------
+select name from students where marks > 75 order by right (name,3), id;
+
