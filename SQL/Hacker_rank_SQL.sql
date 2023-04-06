@@ -241,4 +241,38 @@ select distinct city from station
 where right(city,1) not in ('a', 'e', 'i', 'o','u') and left(city,1)  not in ('a', 'e', 'i', 'o','u')
 ------------------------Higher than 75 marks------------------------
 select name from students where marks > 75 order by right (name,3), id;
+-------------------Employee Names--------------------
+/*
+Enter your query here.
+*/
+select name from Employee 
+order by name asc
+---------------------Type of Triangle-----------------------------------
+/*
+Enter your query here.
+*/
+Select 
+    CASE 
+        WHEN A+B<=C OR A+C<=B OR B+C<=A THEN "Not A Triangle" 
+        WHEN A=B AND A=C AND B=C THEN "Equilateral"
+        WHEN A<>B AND B<>C AND C<>A THEN "Scalene"
+        ELSE "Isosceles"
+    END as checking
+FROM TRIANGLES        
+---------------------- Population Difference-------------------------
+select max(population) - min(population) as difference from city
+---------------------- The blunder----------------------------------
+select CEIL(avg(salary) - avg(replace(salary,'0',''))) from employees
+----------------------Top Earners-----------------------------------
+/*
+Enter your query here.
+*/
+select salary*months, COUNT(*) from employee
+group by salary*months
+order by salary*months desc limit 1
+-------------------Weather observation station 2-------------------------
+Enter your query here.
+*/
+select round(sum(lat_n),2), round(sum(long_w),2) from station
+---------------
 
